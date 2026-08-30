@@ -129,7 +129,7 @@
             color: #8b5a2b;
             font-size: 16px;
         }
-        button, .whatsapp-btn {
+        button, .whatsapp-btn, .clear-btn {
             display: inline-block;
             padding: 14px 28px;
             font-size: 16px;
@@ -154,6 +154,15 @@
         }
         .whatsapp-btn:hover {
             background: #1da851;
+        }
+        .clear-btn {
+            background: #dc3545;
+            color: #fff;
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+        .clear-btn:hover {
+            background: #b02a37;
         }
         .modal {
             display: none;
@@ -201,9 +210,10 @@
     <header>
         <h1>Escolha o que levar 🎁</h1>
         <p>Se quiser nos presentear, escolha um item da lista. Assim evitamos presentes repetidos. ❤️</p>
+        <!-- BOTÃO DE ADMINISTRADOR -->
+        <button class="clear-btn" onclick="limparTodasReservas()">🗑️ Limpar TODAS as reservas</button>
     </header>
 
-    <!-- LISTA DE PRESENTES VAI APARECER AQUI -->
     <section class="gift-section">
         <div id="giftList" class="gift-list"></div>
     </section>
@@ -283,6 +293,17 @@ function saveTakenGifts(data) {
 }
 
 // ==========================================
+// 🗑️ FUNÇÃO PARA LIMPAR RESERVAS
+// ==========================================
+function limparTodasReservas() {
+    if (confirm("Tem certeza? Isso apaga TODAS as reservas!")) {
+        localStorage.removeItem("chaCasaNovaGifts");
+        alert("✅ Todas as reservas foram apagadas! A lista voltou ao normal.");
+        renderGifts();
+    }
+}
+
+// ==========================================
 // 📋 MOSTRAR A LISTA
 // ==========================================
 function renderGifts() {
@@ -354,7 +375,7 @@ successModal?.addEventListener("click", e => {
 });
 
 // ==========================================
-// 🚀 INICIAR — MOSTRA A LISTA AGORA!
+// 🚀 INICIAR
 // ==========================================
 renderGifts();
 </script>
