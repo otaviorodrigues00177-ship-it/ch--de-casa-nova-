@@ -47,8 +47,37 @@
             margin: 15px auto 0;
             line-height: 1.6;
         }
+        .endereco-box {
+            margin-top: 18px;
+            padding: 15px;
+            background: #fff6e9;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        .endereco-box p {
+            font-size: 15px;
+            color: #5a3e2b;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .btn-mapa {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            background: #4285F4;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-mapa:hover {
+            background: #3367D6;
+        }
         .senha-box {
-            margin-top: 15px;
+            margin-top: 18px;
         }
         .senha-box input {
             padding: 8px 12px;
@@ -234,6 +263,12 @@
             color: #5a3e2b;
             line-height: 1.6;
         }
+        .info-reserva {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #8b6b54;
+            line-height: 1.5;
+        }
         .close {
             position: absolute;
             top: 12px;
@@ -258,12 +293,6 @@
         #confetti.active {
             display: block;
         }
-        .info-reserva {
-            margin-top: 12px;
-            font-size: 14px;
-            color: #8b6b54;
-            line-height: 1.5;
-        }
     </style>
 </head>
 <body>
@@ -273,6 +302,12 @@
         <div class="nomes">Otávio Rodrigues e Isabela Gomes</div>
         <p class="frase">"Venha construir a nossa casa e encher de amor cada cantinho! ❤️"</p>
         <p>Com muito carinho e amor, estamos construindo nosso cantinho. Venha nos ajudar a dar os primeiros passos dessa nova fase!</p>
+
+        <!-- 📍 ENDEREÇO E BOTÃO DO MAPA --- EDITE AQUI! -->
+        <div class="endereco-box">
+            <p>📍 Rua das Flores, 123 — Bairro Centro<br>Araraquara — SP</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=Rua das Flores, 123, Araraquara-SP" target="_blank" class="btn-mapa">📍 Ver no Mapa</a>
+        </div>
 
         <div class="senha-box">
             <input type="password" id="senhaAdmin" placeholder="Senha do administrador">
@@ -310,6 +345,12 @@
     <canvas id="confetti"></canvas>
 
 <script>
+// ==========================================
+// ⚠️ EDITE O ENDEREÇO AQUI!
+// ==========================================
+const ENDERECO_COMPLETO = "Rua Valeriano Voltarel 231 Planalto Verde";
+const LINK_GOOGLE_MAPS = "https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVhKamNXcDZNVEZxGAo";
+
 const whatsappNumber = "5516997882498";
 const SENHA_ADMIN = "gomes";
 
@@ -422,19 +463,6 @@ function formatarDataHora() {
     return `${dia}/${mes}/${ano} às ${hora}:${minuto}`;
 }
 
-function obterLocalizacao() {
-    return new Promise((resolver) => {
-        if (!navigator.geolocation) {
-            resolver("Localização não disponível");
-            return;
-        }
-        navigator.geolocation.getCurrentPosition(
-            (pos) => resolver(`${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`),
-            () => resolver("Não foi possível obter a localização")
-        );
-    });
-}
-
 function criarConfete() {
     confettiCanvas.width = window.innerWidth;
     confettiCanvas.height = window.innerHeight;
@@ -491,7 +519,7 @@ function criarConfete() {
     }, 3000);
 }
 
-confirmGiftButton?.addEventListener("click", async () => {
+confirmGiftButton?.addEventListener("click", () => {
     const name = guestName?.value.trim();
     if (!name) return alert("Digite seu nome!"), guestName?.focus();
     if (!selectedGift) return alert("Escolha um presente clicando na lista!");
@@ -506,14 +534,12 @@ confirmGiftButton?.addEventListener("click", async () => {
     }
 
     const dataHora = formatarDataHora();
-    const localizacao = await obterLocalizacao();
 
     takenGifts[selectedGift.id] = {
         name,
         gift: selectedGift.name,
         date: new Date().toISOString(),
-        dataHoraFormatada: dataHora,
-        localizacao: localizacao
+        dataHoraFormatada: dataHora
     };
 
     saveTakenGifts(takenGifts);
@@ -523,20 +549,20 @@ confirmGiftButton?.addEventListener("click", async () => {
     }
 
     if (infoReserva) {
-        infoReserva.innerHTML = `📅 ${dataHora}<br>📍 ${localizacao}`;
+        infoReserva.innerHTML = `📅 ${dataHora}<br>📍 ${ENDERECO_COMPLETO}`;
     }
 
     successModal?.classList.add("active");
     criarConfete();
-    createWhatsappLink(name, selectedGift.name, dataHora, localizacao);
+    createWhatsappLink(name, selectedGift.name, dataHora);
     renderGifts();
     selectedGift = null;
     if (selectedGiftText) selectedGiftText.textContent = "Nenhum item selecionado.";
 });
 
-function createWhatsappLink(name, gift, dataHora, localizacao) {
+function createWhatsappLink(name, gift, dataHora) {
     if (!whatsappButton) return;
-    const msg = `Olá! 😊 Confirmo presença no Chá de Casa Nova! 🏠❤️\nNome: ${name}\nPresente: ${gift}\nData e hora: ${dataHora}\nLocalização: ${localizacao}`;
+    const msg = `Olá! 😊 Confirmo presença no Chá de Casa Nova! 🏠❤️\nNome: ${name}\nPresente: ${gift}\n📅 Data: ${dataHora}\n📍 Local: ${ENDERECO_COMPLETO}`;
     whatsappButton.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
 }
 
