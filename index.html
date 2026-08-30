@@ -4,7 +4,197 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chá de Casa Nova</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', serif;
+        }
+        body {
+            background: #fef8f0;
+            color: #5a3e2b;
+            padding: 30px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        header h1 {
+            font-size: 38px;
+            color: #5a3e2b;
+            margin-bottom: 10px;
+        }
+        header p {
+            color: #8b6b54;
+            font-size: 17px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .gift-section {
+            margin-bottom: 40px;
+        }
+        .gift-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 18px;
+        }
+        .gift-item {
+            background: #fff;
+            padding: 22px 15px;
+            border-radius: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 3px 10px rgba(90, 62, 43, 0.08);
+        }
+        .gift-item:hover {
+            transform: translateY(-4px);
+            border-color: #d4a97f;
+        }
+        .gift-item.selected {
+            border-color: #8b5a2b;
+            background: #fff8ee;
+        }
+        .gift-item.taken {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f3f0eb;
+        }
+        .gift-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+        .gift-item h3 {
+            font-size: 17px;
+            color: #5a3e2b;
+            margin-bottom: 6px;
+        }
+        .gift-item p {
+            font-size: 14px;
+            color: #8b6b54;
+            margin-bottom: 10px;
+        }
+        .gift-status {
+            font-size: 13px;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+        .gift-item.taken .gift-status {
+            color: #b22222;
+        }
+        .confirm-box {
+            background: #fff6e9;
+            padding: 35px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        .confirm-box h3 {
+            color: #5a3e2b;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+        .confirm-box input {
+            width: 100%;
+            max-width: 400px;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid #e2d0b8;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: #fff;
+            color: #5a3e2b;
+        }
+        .confirm-box input:focus {
+            outline: none;
+            border-color: #b8860b;
+        }
+        .selected-display {
+            background: #fff;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 22px;
+        }
+        .selected-display strong {
+            display: block;
+            color: #5a3e2b;
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+        .selected-display p {
+            color: #8b5a2b;
+            font-size: 16px;
+        }
+        button, .whatsapp-btn {
+            display: inline-block;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 6px;
+            transition: all 0.2s;
+        }
+        #confirmGift {
+            background: #8b5a2b;
+            color: #fff;
+        }
+        #confirmGift:hover {
+            background: #6b4423;
+        }
+        .whatsapp-btn {
+            background: #25d366;
+            color: #fff;
+        }
+        .whatsapp-btn:hover {
+            background: #1da851;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 420px;
+            position: relative;
+        }
+        .modal-content p {
+            font-size: 18px;
+            color: #5a3e2b;
+            line-height: 1.6;
+        }
+        .close {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 26px;
+            cursor: pointer;
+            color: #999;
+        }
+        .close:hover {
+            color: #333;
+        }
+    </style>
 </head>
 <body>
 
@@ -13,12 +203,11 @@
         <p>Se quiser nos presentear, escolha um item da lista. Assim evitamos presentes repetidos. ❤️</p>
     </header>
 
-    <!-- Lista de Presentes -->
+    <!-- LISTA DE PRESENTES VAI APARECER AQUI -->
     <section class="gift-section">
         <div id="giftList" class="gift-list"></div>
     </section>
 
-    <!-- Área de Seleção -->
     <section class="confirm-box">
         <h3>Seu nome</h3>
         <input type="text" id="guestName" placeholder="Digite seu nome">
@@ -32,7 +221,6 @@
         <a id="whatsappButton" href="#" target="_blank" class="whatsapp-btn">📱 Enviar pelo WhatsApp</a>
     </section>
 
-    <!-- Modal de Sucesso -->
     <div id="successModal" class="modal">
         <div class="modal-content">
             <span id="closeModal" class="close">&times;</span>
@@ -40,6 +228,135 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+<script>
+// ==========================================
+// ⚠️ COLOQUE SEU NÚMERO ABAIXO
+// ==========================================
+const whatsappNumber = "5516997882498";
+
+// ==========================================
+// ✅ LISTA DE PRESENTES
+// ==========================================
+const gifts = [
+    { id: 1,  icon: "🛏️", name: "Jogo de lençol",          description: "Lençóis e fronhas" },
+    { id: 2,  icon: "☁️", name: "Edredom",                 description: "Cobertor acolchoado" },
+    { id: 3,  icon: "💆", name: "Almofadas",                description: "Almofadas decorativas" },
+    { id: 4,  icon: "🟫", name: "Tapete",                   description: "Tapete para sala/quarto" },
+    { id: 5,  icon: "😴", name: "Travesseiros",             description: "Travesseiros confortáveis" },
+    { id: 6,  icon: "🧺", name: "Cesto para roupa suja",    description: "Cesto organizador" },
+    { id: 7,  icon: "🛁", name: "Jogo de toalhas",          description: "Toalhas de banho e rosto" },
+    { id: 8,  icon: "🍽️", name: "Pratos rasos",             description: "Conjunto de pratos rasos" },
+    { id: 9,  icon: "🥣", name: "Pratos fundos",            description: "Conjunto de pratos fundos" },
+    { id: 10, icon: "🥛", name: "Jogo de copos",            description: "Copos para uso diário" },
+    { id: 11, icon: "🍷", name: "Jogo de taças",            description: "Taças para ocasiões" },
+    { id: 12, icon: "🌡️", name: "Garrafa térmica",          description: "Mantém a temperatura" },
+    { id: 13, icon: "🍽️", name: "Travessas",               description: "Para servir refeições" },
+    { id: 14, icon: "🫙", name: "Jarra",                    description: "Para água e sucos" },
+    { id: 15, icon: "🔪", name: "Tábua para cortar carne",  description: "Tábua de corte" },
+    { id: 16, icon: "🥄", name: "Batedeira",                description: "Para preparar massas" },
+    { id: 17, icon: "🔄", name: "Liquidificador",           description: "Bater e misturar alimentos" },
+    { id: 18, icon: "🍞", name: "Torradeira",              description: "Torradas rápidas" },
+    { id: 19, icon: "🍎", name: "Fruteira",                description: "Organização de frutas" },
+    { id: 20, icon: "🚿", name: "Jogo de banheiro",         description: "Acessórios para banheiro" }
+];
+
+let selectedGift = null;
+
+const giftList = document.getElementById("giftList");
+const guestName = document.getElementById("guestName");
+const selectedGiftText = document.getElementById("selectedGift");
+const confirmGiftButton = document.getElementById("confirmGift");
+const successModal = document.getElementById("successModal");
+const closeModal = document.getElementById("closeModal");
+const modalMessage = document.getElementById("modalMessage");
+const whatsappButton = document.getElementById("whatsappButton");
+
+function getTakenGifts() {
+    try {
+        const saved = localStorage.getItem("chaCasaNovaGifts");
+        return saved ? JSON.parse(saved) : {};
+    } catch (error) { return {}; }
+}
+
+function saveTakenGifts(data) {
+    localStorage.setItem("chaCasaNovaGifts", JSON.stringify(data));
+}
+
+// ==========================================
+// 📋 MOSTRAR A LISTA
+// ==========================================
+function renderGifts() {
+    if (!giftList) return;
+    giftList.innerHTML = "";
+    const takenGifts = getTakenGifts();
+
+    gifts.forEach(gift => {
+        const item = document.createElement("div");
+        item.className = "gift-item";
+        const isTaken = Object.prototype.hasOwnProperty.call(takenGifts, gift.id);
+        if (isTaken) item.classList.add("taken");
+
+        item.innerHTML = `
+            <div class="gift-icon">${gift.icon}</div>
+            <h3>${gift.name}</h3>
+            <p>${gift.description}</p>
+            <div class="gift-status">${isTaken ? "✓ Já escolhido" : "Disponível"}</div>
+        `;
+
+        if (!isTaken) {
+            item.addEventListener("click", () => selectGift(gift, item));
+        }
+        giftList.appendChild(item);
+    });
+}
+
+function selectGift(gift, element) {
+    document.querySelectorAll(".gift-item").forEach(i => i.classList.remove("selected"));
+    element.classList.add("selected");
+    selectedGift = gift;
+    if (selectedGiftText) selectedGiftText.textContent = `${gift.icon} ${gift.name}`;
+}
+
+confirmGiftButton?.addEventListener("click", () => {
+    const name = guestName?.value.trim();
+    if (!name) return alert("Digite seu nome!"), guestName?.focus();
+    if (!selectedGift) return alert("Escolha um presente clicando na lista!");
+
+    const takenGifts = getTakenGifts();
+    if (takenGifts[selectedGift.id]) {
+        alert("Esse já foi escolhido! Escolha outro.");
+        selectedGift = null;
+        renderGifts();
+        if (selectedGiftText) selectedGiftText.textContent = "Nenhum item selecionado.";
+        return;
+    }
+
+    takenGifts[selectedGift.id] = { name, gift: selectedGift.name, date: new Date().toISOString() };
+    saveTakenGifts(takenGifts);
+
+    if (modalMessage) modalMessage.textContent = `${name}, seu presente "${selectedGift.name}" foi reservado! ❤️`;
+    successModal?.classList.add("active");
+    createWhatsappLink(name, selectedGift.name);
+    renderGifts();
+    selectedGift = null;
+    if (selectedGiftText) selectedGiftText.textContent = "Nenhum item selecionado.";
+});
+
+function createWhatsappLink(name, gift) {
+    if (!whatsappButton) return;
+    const msg = `Olá! 😊 Confirmo presença! 🏠❤️\nNome: ${name}\nPresente: ${gift}`;
+    whatsappButton.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
+}
+
+closeModal?.addEventListener("click", () => successModal?.classList.remove("active"));
+successModal?.addEventListener("click", e => {
+    if (e.target === successModal) successModal.classList.remove("active");
+});
+
+// ==========================================
+// 🚀 INICIAR — MOSTRA A LISTA AGORA!
+// ==========================================
+renderGifts();
+</script>
 </body>
 </html>
