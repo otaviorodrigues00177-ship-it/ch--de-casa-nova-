@@ -1,28 +1,32 @@
 // ==========================================
 // CONFIGURAÇÕES — COLOQUE SEU NÚMERO ABAIXO
 // ==========================================
-const eventDate = new Date("2026-10-10T15:00:00").getTime();
-// ⚠️ COLOQUE SEU NÚMERO COM DDD (SÓ NÚMEROS)
-const whatsappNumber = "5516997882498";
+const whatsappNumber = "5516997882498"; // ⚠️ CONFIRME SEU NÚMERO AQUI!
 
 // ==========================================
-// LISTA DE PRESENTES
+// ✅ LISTA DE PRESENTES — COM SEUS ITENS!
 // ==========================================
 const gifts = [
-    { id: 1,  icon: "🍳", name: "Jogo de panelas",      description: "Panelas para a cozinha" },
-    { id: 2,  icon: "🍽️", name: "Jogo de pratos",       description: "Conjunto de pratos" },
-    { id: 3,  icon: "🥛", name: "Jogo de copos",         description: "Copos para o dia a dia" },
-    { id: 4,  icon: "☕", name: "Jogo de xícaras",       description: "Xícaras para café" },
-    { id: 5,  icon: "🍴", name: "Jogo de talheres",      description: "Talheres para a casa" },
-    { id: 6,  icon: "🛏️", name: "Jogo de cama",          description: "Lençóis e fronhas" },
-    { id: 7,  icon: "🛁", name: "Toalhas de banho",      description: "Kit de toalhas" },
-    { id: 8,  icon: "🧹", name: "Kit de limpeza",        description: "Produtos de limpeza" },
-    { id: 9,  icon: "🗑️", name: "Lixeira",              description: "Lixeira para cozinha" },
-    { id: 10, icon: "🥣", name: "Jogo de potes",         description: "Potes para alimentos" },
-    { id: 11, icon: "🍵", name: "Chaleira",             description: "Chaleira para cozinha" },
-    { id: 12, icon: "🧺", name: "Cesto de roupa",        description: "Cesto organizador" },
-    { id: 13, icon: "🧂", name: "Kit de temperos",       description: "Porta-temperos" },
-    { id: 14, icon: "🪴", name: "Planta decorativa",     description: "Planta para decorar a casa" },
+    { id: 1,  icon: "🛏️", name: "Jogo de lençol",          description: "Lençóis e fronhas" },
+    { id: 2,  icon: "☁️", name: "Edredom",                 description: "Cobertor acolchoado" },
+    { id: 3,  icon: "💆", name: "Almofadas",                description: "Almofadas decorativas" },
+    { id: 4,  icon: "🟫", name: "Tapete",                   description: "Tapete para sala/quarto" },
+    { id: 5,  icon: "😴", name: "Travesseiros",             description: "Travesseiros confortáveis" },
+    { id: 6,  icon: "🧺", name: "Cesto para roupa suja",    description: "Cesto organizador" },
+    { id: 7,  icon: "🛁", name: "Jogo de toalhas",          description: "Toalhas de banho e rosto" },
+    { id: 8,  icon: "🍽️", name: "Pratos rasos",             description: "Conjunto de pratos rasos" },
+    { id: 9,  icon: "🥣", name: "Pratos fundos",            description: "Conjunto de pratos fundos" },
+    { id: 10, icon: "🥛", name: "Jogo de copos",            description: "Copos para uso diário" },
+    { id: 11, icon: "🍷", name: "Jogo de taças",            description: "Taças para ocasiões" },
+    { id: 12, icon: "🌡️", name: "Garrafa térmica",          description: "Mantém a temperatura" },
+    { id: 13, icon: "🍽️", name: "Travessas",               description: "Para servir refeições" },
+    { id: 14, icon: "🫙", name: "Jarra",                    description: "Para água e sucos" },
+    { id: 15, icon: "🔪", name: "Tábua para cortar carne",  description: "Tábua de corte" },
+    { id: 16, icon: "🥄", name: "Batedeira",                description: "Para preparar massas" },
+    { id: 17, icon: "🔄", name: "Liquidificador",           description: "Bater e misturar alimentos" },
+    { id: 18, icon: "🍞", name: "Torradeira",              description: "Torradas rápidas" },
+    { id: 19, icon: "🍎", name: "Fruteira",                description: "Organização de frutas" },
+    { id: 20, icon: "🚿", name: "Jogo de banheiro",         description: "Acessórios para banheiro" }
 ];
 
 // ==========================================
@@ -60,10 +64,13 @@ function saveTakenGifts(data) {
 }
 
 // ==========================================
-// 📋 MOSTRAR LISTA DE PRESENTES NA TELA
+// 📋 MOSTRAR LISTA NA TELA
 // ==========================================
 function renderGifts() {
-    if (!giftList) return;
+    if (!giftList) {
+        console.error("❌ Elemento giftList NÃO ENCONTRADO no HTML!");
+        return;
+    }
     giftList.innerHTML = "";
     const takenGifts = getTakenGifts();
 
@@ -87,15 +94,15 @@ function renderGifts() {
 
         giftList.appendChild(item);
     });
+
+    console.log(`✅ ${gifts.length} itens carregados!`);
 }
 
 // ==========================================
 // ✅ ESCOLHER PRESENTE
 // ==========================================
 function selectGift(gift, element) {
-    // Remove seleção anterior
     document.querySelectorAll(".gift-item").forEach(i => i.classList.remove("selected"));
-    // Marca o escolhido
     element.classList.add("selected");
     selectedGift = gift;
     if (selectedGiftText) selectedGiftText.textContent = `${gift.icon} ${gift.name}`;
@@ -147,7 +154,7 @@ confirmGiftButton?.addEventListener("click", () => {
 function createWhatsappLink(name, gift) {
     if (!whatsappButton) return;
     const mensagem = `Olá! 😊 Confirmo minha presença no Chá de Casa Nova! 🏠❤️\nNome: ${name}\nPresente: ${gift}\nNos vemos lá! 🎉`;
-    whatsappButton.href = `https://wa.me/${5516997882498}?text=${encodeURIComponent(eu to comfrimado)}`;
+    whatsappButton.href = `https://wa.me/${5516997882498}?text=${encodeURIComponent(mensagem)}`;
 }
 
 // ==========================================
@@ -159,10 +166,10 @@ successModal?.addEventListener("click", e => {
 });
 
 // ==========================================
-// 🚀 INICIAR TUDO QUANDO A PÁGINA CARREGAR
+// 🚀 INICIAR — MOSTRA A LISTA AUTOMATICAMENTE
 // ==========================================
 document.addEventListener("DOMContentLoaded", function () {
-    renderGifts(); // ← ISSO MOSTRA A LISTA DE PRESENTES! NÃO APAGUE!
+    console.log("🚀 Página carregada! Carregando presentes...");
+    renderGifts(); // ← ESSA LINHA MOSTRA A LISTA! NÃO APAGUE!
     createWhatsappLink("", "");
-    console.log("✅ Lista de presentes carregada!");
 });
