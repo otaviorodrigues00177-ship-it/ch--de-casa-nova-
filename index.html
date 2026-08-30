@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chá de Casa Nova</title>
+    <title>Chá de Casa Nova — Otávio & Isabela</title>
     <style>
         * {
             margin: 0;
@@ -21,18 +21,69 @@
         header {
             text-align: center;
             margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 2px dashed #d4b89a;
         }
         header h1 {
-            font-size: 38px;
+            font-size: 36px;
             color: #5a3e2b;
+            margin-bottom: 8px;
+        }
+        header .nomes {
+            font-size: 26px;
+            color: #8b5a2b;
+            font-weight: 600;
             margin-bottom: 10px;
+        }
+        header .frase {
+            font-size: 18px;
+            color: #8b6b54;
+            font-style: italic;
         }
         header p {
             color: #8b6b54;
-            font-size: 17px;
+            font-size: 16px;
             max-width: 600px;
-            margin: 0 auto;
+            margin: 15px auto 0;
             line-height: 1.6;
+        }
+        .senha-box {
+            margin-top: 15px;
+        }
+        .senha-box input {
+            padding: 8px 12px;
+            width: 200px;
+            border: 2px solid #e2d0b8;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+        .senha-box button {
+            padding: 8px 16px;
+            font-size: 14px;
+            background: #8b5a2b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .clear-btn {
+            margin-top: 12px;
+            padding: 10px 20px;
+            font-size: 14px;
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            display: none; /* ESCONDIDO ATÉ COLOCAR A SENHA */
+        }
+        .clear-btn.visivel {
+            display: inline-block;
+        }
+        .clear-btn:hover {
+            background: #b02a37;
         }
         .gift-section {
             margin-bottom: 40px;
@@ -129,7 +180,7 @@
             color: #8b5a2b;
             font-size: 16px;
         }
-        button, .whatsapp-btn, .clear-btn {
+        button, .whatsapp-btn {
             display: inline-block;
             padding: 14px 28px;
             font-size: 16px;
@@ -154,15 +205,6 @@
         }
         .whatsapp-btn:hover {
             background: #1da851;
-        }
-        .clear-btn {
-            background: #dc3545;
-            color: #fff;
-            font-size: 14px;
-            padding: 10px 20px;
-        }
-        .clear-btn:hover {
-            background: #b02a37;
         }
         .modal {
             display: none;
@@ -208,10 +250,18 @@
 <body>
 
     <header>
-        <h1>Escolha o que levar 🎁</h1>
-        <p>Se quiser nos presentear, escolha um item da lista. Assim evitamos presentes repetidos. ❤️</p>
-        <!-- BOTÃO DE ADMINISTRADOR -->
-        <button class="clear-btn" onclick="limparTodasReservas()">🗑️ Limpar TODAS as reservas</button>
+        <h1>Chá de Casa Nova 🏠🎁</h1>
+        <div class="nomes">Otávio Rodrigues e Isabela Gomes</div>
+        <p class="frase">"Venha construir a nossa casa" ❤️</p>
+        <p>Se quiser nos presentear, escolha um item da lista. Assim evitamos presentes repetidos.</p>
+
+        <!-- 🔒 ÁREA DO ADMINISTRADOR -->
+        <div class="senha-box">
+            <input type="password" id="senhaAdmin" placeholder="Senha do administrador">
+            <button onclick="verificarSenha()">🔓 Liberar</button>
+            <br>
+            <button id="botaoLimpar" class="clear-btn" onclick="limparTodasReservas()">🗑️ Limpar TODAS as reservas</button>
+        </div>
     </header>
 
     <section class="gift-section">
@@ -240,9 +290,10 @@
 
 <script>
 // ==========================================
-// ⚠️ COLOQUE SEU NÚMERO ABAIXO
+// ⚠️ CONFIGURAÇÕES
 // ==========================================
-const whatsappNumber = "5516997882498";
+const whatsappNumber = "5516997882498"; // COLOQUE SEU NÚMERO AQUI
+const SENHA_ADMIN = "123456"; // 🔒 ALTERE AQUI PARA UMA SENHA MAIS FORTE!
 
 // ==========================================
 // ✅ LISTA DE PRESENTES
@@ -280,7 +331,36 @@ const successModal = document.getElementById("successModal");
 const closeModal = document.getElementById("closeModal");
 const modalMessage = document.getElementById("modalMessage");
 const whatsappButton = document.getElementById("whatsappButton");
+const botaoLimpar = document.getElementById("botaoLimpar");
+const senhaAdminInput = document.getElementById("senhaAdmin");
 
+// ==========================================
+// 🔒 VERIFICAR SENHA DO ADMINISTRADOR
+// ==========================================
+function verificarSenha() {
+    const senhaDigitada = senhaAdminInput.value;
+    if (senhaDigitada === SENHA_ADMIN) {
+        botaoLimpar.classList.add("visivel");
+        alert("✅ Acesso liberado! O botão de limpeza apareceu.");
+    } else {
+        alert("❌ Senha incorreta!");
+    }
+}
+
+// ==========================================
+// 🗑️ APAGAR TODAS AS RESERVAS (SÓ ADMIN)
+// ==========================================
+function limparTodasReservas() {
+    if (confirm("⚠️ Tem certeza? Isso apaga TODAS as reservas!")) {
+        localStorage.removeItem("chaCasaNovaGifts");
+        alert("✅ Todas as reservas foram apagadas!");
+        renderGifts();
+    }
+}
+
+// ==========================================
+// SALVAR E CARREGAR
+// ==========================================
 function getTakenGifts() {
     try {
         const saved = localStorage.getItem("chaCasaNovaGifts");
@@ -293,18 +373,7 @@ function saveTakenGifts(data) {
 }
 
 // ==========================================
-// 🗑️ FUNÇÃO PARA LIMPAR RESERVAS
-// ==========================================
-function limparTodasReservas() {
-    if (confirm("Tem certeza? Isso apaga TODAS as reservas!")) {
-        localStorage.removeItem("chaCasaNovaGifts");
-        alert("✅ Todas as reservas foram apagadas! A lista voltou ao normal.");
-        renderGifts();
-    }
-}
-
-// ==========================================
-// 📋 MOSTRAR A LISTA
+// 📋 MOSTRAR LISTA
 // ==========================================
 function renderGifts() {
     if (!giftList) return;
@@ -365,7 +434,7 @@ confirmGiftButton?.addEventListener("click", () => {
 
 function createWhatsappLink(name, gift) {
     if (!whatsappButton) return;
-    const msg = `Olá! 😊 Confirmo presença! 🏠❤️\nNome: ${name}\nPresente: ${gift}`;
+    const msg = `Olá! 😊 Confirmo presença no Chá de Casa Nova! 🏠❤️\nNome: ${name}\nPresente: ${gift}`;
     whatsappButton.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
 }
 
