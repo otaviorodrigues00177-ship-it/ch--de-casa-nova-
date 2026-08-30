@@ -1,4 +1,3 @@
-const SENHA_ADMIN = "nossacasanovai/o"; // 🔒 ALTERE AQUI!
 // ==========================================
 // CONFIGURAÇÕES — COLOQUE SEU NÚMERO ABAIXO
 // ==========================================
